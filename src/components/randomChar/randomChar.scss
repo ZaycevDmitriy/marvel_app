@@ -28,6 +28,7 @@
         text-transform: uppercase;
     }
     &__descr {
+        overflow: auto;
         font-size: 14px;
         line-height: 18px;
     }

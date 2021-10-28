@@ -28,7 +28,10 @@
         text-transform: uppercase;
     }
     &__descr {
-        overflow: auto;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
         font-size: 14px;
         line-height: 18px;
     }

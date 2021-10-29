@@ -6,10 +6,10 @@ import {Spiner} from "../spiner/Spiner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 
 class RandomChar extends Component {
-  constructor(props) {
-    super(props);
-    this.updateChar(); // вызов методов которые получают с сервера данные плохая практика
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.updateChar(); // вызов методов в конструкторе, которые получают с сервера данные плохая практика.
+  // }
 
   state = {
     char: {},
@@ -18,13 +18,6 @@ class RandomChar extends Component {
   }
 
   marvelService = new MarvelService();
-
-  onError = () => {
-    this.setState(({
-      loading: false,
-      error: true,
-    }))
-  }
 
   onCharLoaded = (char) => {
     this.setState({char, loading: false})
@@ -37,6 +30,17 @@ class RandomChar extends Component {
       .getCharacter(id)
       .then(this.onCharLoaded)
       .catch(this.onError)
+  }
+
+  onError = () => {
+    this.setState(({
+      loading: false,
+      error: true,
+    }))
+  }
+
+  componentDidMount() {
+    this.updateChar();
   }
 
   render() {
@@ -70,10 +74,11 @@ class RandomChar extends Component {
 
 const View = ({char}) => {
   const {name, description, homepage, wiki, thumbnail} = char;
+  const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
 
   return (
     <div className="randomchar__block">
-      <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+      <img src={thumbnail} style={styleImg} alt="Random character" className="randomchar__img"/>
       <div className="randomchar__info">
         <p className="randomchar__name">{name}</p>
         <p className="randomchar__descr">

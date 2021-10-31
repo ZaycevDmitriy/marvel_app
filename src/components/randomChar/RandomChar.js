@@ -8,7 +8,7 @@ import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 class RandomChar extends Component {
   // constructor(props) {
   //   super(props);
-  //   this.updateChar(); // вызов методов в конструкторе, которые получают с сервера данные плохая практика.
+  //   // this.updateChar(); // вызов методов в конструкторе, которые получают с сервера данные плохая практика.
   // }
 
   state = {
@@ -20,23 +20,28 @@ class RandomChar extends Component {
   marvelService = new MarvelService();
 
   onCharLoaded = (char) => {
-    this.setState({char, loading: false})
+    this.setState({char, loading: false, error: false});
+  }
+
+  onCharLoading = () => {
+    this.setState({loading: true, error: false});
   }
 
   updateChar = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 
+    this.onCharLoading();
     this.marvelService
       .getCharacter(id)
       .then(this.onCharLoaded)
-      .catch(this.onError)
+      .catch(this.onError);
   }
 
   onError = () => {
-    this.setState(({
+    this.setState({
       loading: false,
       error: true,
-    }))
+    })
   }
 
   componentDidMount() {
@@ -45,7 +50,15 @@ class RandomChar extends Component {
 
   render() {
     const {char, loading, error} = this.state;
-    const errorMessage = error ? <ErrorMessage/> : null;
+    const styleError = {
+      width: '250px',
+      height: '100%',
+      objectFit: 'contain',
+      margin: '0 auto'
+    };
+
+    const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
+
     const spiner = loading ? <Spiner/> : null;
     const content = !(loading || error) ? <View char={char}/> : null;
 
@@ -62,7 +75,7 @@ class RandomChar extends Component {
           <p className="randomchar__title">
             Or choose another one
           </p>
-          <button className="button button__main">
+          <button className="button button__main" onClick={this.updateChar}>
             <div className="inner">try it</div>
           </button>
           <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>

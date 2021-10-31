@@ -1,5 +1,4 @@
 import './charList.scss';
-// import abyss from '../../resources/img/abyss.jpg';
 import {Component} from "react";
 import {MarvelService} from "../../services/MarvelService";
 import {CharItem} from "./charItem/CharItem";
@@ -21,11 +20,23 @@ class CharList extends Component {
     this.idInterval = setInterval(() => (this.updateChars), 3000);
   }
 
+  onSelectChange = (id) => {
+    this.setState(({chars}) => {
+      return chars.map(char => {
+        if(char.id === id) {
+          return {...char, select: true};
+        } else {
+          return {...char, select: false};
+        }
+      })
+    })
+}
+
   updateChars = () => {
     this.marvelService
       .getAllCharacters()
       .then(this.onLoadedChars)
-      .catch(this.onError)
+      .catch(this.onError);
   }
 
   onLoadedChars = (chars) => {
@@ -45,6 +56,9 @@ class CharList extends Component {
           <CharItem name={char.name}
                     thumbnail={char.thumbnail}
                     key={char.id}
+                    id={char.id}
+                    onChangeId={this.props.onChangeId}
+                    onSelectChange={this.onSelectChange}
           />
         )
       } else {

@@ -58,7 +58,6 @@ class RandomChar extends Component {
     };
 
     const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
-
     const spiner = loading ? <Spiner/> : null;
     const content = !(loading || error) ? <View char={char}/> : null;
 

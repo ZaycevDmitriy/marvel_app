@@ -33,15 +33,8 @@ class CharList extends Component {
   }
 
   componentDidMount() {
-    console.log('mount');
-    // clearInterval(this.idInterval);
     this.updateChars();
   }
-
-  // componentDidUpdate() {
-  //   console.log('didUpdate');
-  //   clearInterval(this.idInterval);
-  // }
 
   render() {
     const {chars, loaded, error} = this.state;

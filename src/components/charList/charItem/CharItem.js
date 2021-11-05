@@ -1,5 +1,6 @@
 import './charItem.scss';
 import {Component} from "react";
+import PropTypes from "prop-types";
 
 export class CharItem extends Component {
   render() {
@@ -16,4 +17,11 @@ export class CharItem extends Component {
       </li>
     )
   }
+}
+
+CharItem.propTypes = {
+  onChangeId: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  thumbnail: PropTypes.string,
+  id: PropTypes.number,
 }

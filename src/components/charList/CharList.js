@@ -8,8 +8,12 @@ import {Spiner} from "../spiner/Spiner";
 class CharList extends Component {
   state = {
     chars: new Array(9).fill(undefined),
-    loaded: true,
+    firstBoot: true,  // первая загрузка
+    loaded: true, // идет загрузка персонажей, крутится спинер
     error: false,
+    offset: 210,
+    loadingBtn: false,
+    ending: false,
   }
 
   marvelService = new MarvelService();
@@ -22,25 +26,50 @@ class CharList extends Component {
 
   onSelectChange = (id) => {
     this.setState(({chars}) => {
-      return chars.map(char => {
+      return {chars: chars.map(char => {
         if(char.id === id) {
           return {...char, select: true};
         } else {
           return {...char, select: false};
         }
-      })
+      })}
     })
 }
 
   updateChars = () => {
+    this.onLoadingChars();
+  }
+
+  onLoadingChars = (offset) => {
+    if (offset > 1556) {
+      this.setState({ending: true})
+    }
     this.marvelService
-      .getAllCharacters()
+      .getAllCharacters(offset)
       .then(this.onLoadedChars)
       .catch(this.onError);
   }
 
-  onLoadedChars = (chars) => {
-    this.setState({chars, loaded: false, error: false})
+  onChangeLoadingBtn = () => {
+    this.setState({loadingBtn: true})
+  }
+
+  onLoadedChars = (newChars) => {
+    // при первой загрузке переписываем array chars
+    if(this.state.firstBoot) {
+      this.setState({
+        chars: newChars,
+        loaded: false,
+        error: false,
+        firstBoot: false,
+      });
+    } else {
+      this.setState(({chars, offset}) => ({
+        chars: [...chars, ...newChars],
+        offset: offset + 9,
+        loadingBtn: false,
+      }));
+    }
   }
 
   componentDidMount() {
@@ -48,7 +77,7 @@ class CharList extends Component {
   }
 
   render() {
-    const {chars, loaded, error} = this.state;
+    const {chars, loaded, error, loadingBtn, ending} = this.state;
 
     const charItem = chars.map((char, index) => {
       if(char) {
@@ -73,8 +102,14 @@ class CharList extends Component {
         <ul className="char__grid">
           {charItem}
         </ul>
-        <button className="button button__main button__long">
-          <div className="inner">load more</div>
+        <button className="button button__main button__long"
+        onClick={() => {
+          this.onLoadingChars(this.state.offset + 9);
+          this.onChangeLoadingBtn();
+        }}
+        disabled={loadingBtn}
+        style={ending ? {display: 'none'} : {display: 'block'}}>
+          <div className="inner">{loadingBtn ? 'loading ...' : 'load more'}</div>
         </button>
       </div>
     )

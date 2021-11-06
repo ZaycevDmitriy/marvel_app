@@ -24,17 +24,17 @@ class CharList extends Component {
     this.idInterval = setInterval(() => (this.updateChars), 3000);
   }
 
-  onSelectChange = (id) => {
-    this.setState(({chars}) => {
-      return {chars: chars.map(char => {
-        if(char.id === id) {
-          return {...char, select: true};
-        } else {
-          return {...char, select: false};
-        }
-      })}
-    })
-}
+  // onSelectChange = (id) => {
+  //   this.setState(({chars}) => {
+  //     return {chars: chars.map(char => {
+  //       if(char.id === id) {
+  //         return {...char, select: true};
+  //       } else {
+  //         return {...char, select: false};
+  //       }
+  //     })}
+  //   })
+  // }
 
   updateChars = () => {
     this.onLoadingChars();
@@ -87,7 +87,7 @@ class CharList extends Component {
                     key={char.id}
                     id={char.id}
                     onChangeId={this.props.onChangeId}
-                    onSelectChange={this.onSelectChange}
+                    // onSelectChange={this.onSelectChange}
           />
         )
       } else {

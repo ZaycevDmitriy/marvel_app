@@ -1,38 +1,34 @@
 import './charItem.scss';
-import {Component, createRef} from "react";
+import {useRef} from "react";
 import PropTypes from "prop-types";
 
-export class CharItem extends Component {
-  selectCard = createRef();
+const CharItem = ({name, thumbnail, id, onChangeId}) => {
+  const selectCard = useRef();
 
-  onSelectCard = () => {
-    if (this.selectCard) {
-      this.selectCard.current.focus();
-    }
+  const onSelectCard = () => {
+    console.log(selectCard)
+    selectCard?.current.focus();
  }
 
-  render() {
-    let {name, thumbnail, id, onChangeId} = this.props;
-    const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
+  const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
 
-    return (
-      <li className="char__item"
-          onClick={() => {
-            onChangeId(id);
-            // onSelectChange(id);
-            this.onSelectCard()
-          }}
-          ref={this.selectCard}
-          tabIndex={0}
-          onKeyUp={e => {
-            if(e.key === ' ' || e.key === 'Enter') onChangeId(id);
-          }}
-      >
-        <img src={thumbnail} alt={name} style={styleImg}/>
-        <div className="char__name">{name}</div>
-      </li>
-    )
-  }
+  return (
+    <li className="char__item"
+        onClick={() => {
+          onChangeId(id);
+          onSelectCard()
+        }}
+        ref={selectCard}
+        tabIndex={0}
+        onKeyUp={e => {
+          if(e.key === ' ' || e.key === 'Enter') onChangeId(id);
+        }}
+    >
+      <img src={thumbnail} alt={name} style={styleImg}/>
+      <div className="char__name">{name}</div>
+    </li>
+  )
+
 }
 
 CharItem.propTypes = {
@@ -41,3 +37,5 @@ CharItem.propTypes = {
   thumbnail: PropTypes.string,
   id: PropTypes.number,
 }
+
+export default CharItem;

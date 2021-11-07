@@ -3,45 +3,37 @@ import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import decoration from '../../resources/img/vision.png';
-import {Component} from "react";
+import {useState} from "react";
 import {ErrorBoundary} from "../errorBoundary/ErrorBoundary";
-import PropTypes from "prop-types";
 
-class App extends Component {
-  state = {
-    charId: null,
+const App = () => {
+  const [charId, setCharId] = useState(null);
+
+  const onChangeId = (id) => {
+    setCharId(id);
   }
 
-  onChangeId = (id) => {
-    this.setState({charId: id})
-  }
 
-  render() {
-    return (
-      <div className="app">
-        <AppHeader/>
-        <main>
+  return (
+    <div className="app">
+      <AppHeader/>
+      <main>
+        <ErrorBoundary>
+          <RandomChar/>
+        </ErrorBoundary>
+        <div className="char__content">
           <ErrorBoundary>
-            <RandomChar/>
+            <CharList onChangeId={onChangeId}/>
           </ErrorBoundary>
-          <div className="char__content">
-            <ErrorBoundary>
-              <CharList onChangeId={this.onChangeId}/>
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <CharInfo charId={this.state.charId}/>
-            </ErrorBoundary>
-          </div>
-          <img className="bg-decoration" src={decoration} alt="vision"/>
-        </main>
-      </div>
-    )
-  }
-}
+          <ErrorBoundary>
+            <CharInfo charId={charId}/>
+          </ErrorBoundary>
+        </div>
+        <img className="bg-decoration" src={decoration} alt="vision"/>
+      </main>
+    </div>
+  )
 
-App.propTypes = {
-  charId: PropTypes.number,
-  onChangeId: PropTypes.func,
 }
 
 export default App;

@@ -1,70 +1,68 @@
 import './charInfo.scss';
-import {Component} from "react";
+import {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import {MarvelService} from "../../services/MarvelService";
-import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
-import {Spiner} from "../spiner/Spiner";
+import ErrorMessage from "../errorMessage";
+import Spinner from "../spiner";
 import Skeleton from "../skeleton/Skeleton";
 
-class CharInfo extends Component {
-  state = {
-    char: null,
-    loading: false,
-    error: false,
+const CharInfo = ({charId}) => {
+  const [char, setChar] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const marvelService = new MarvelService();
+
+  const onCharLoaded = (char) => {
+    setChar(char);
+    setLoading(false);
+    setError(false);
   }
 
-  marvelService = new MarvelService();
-
-  onCharLoaded = (char) => {
-    this.setState({char, loading: false, error: false});
+  const onCharLoading = () => {
+    setLoading(true);
+    setError(false);
   }
 
-  onCharLoading = () => {
-    this.setState({loading: true, error: false});
+  const onError = () => {
+    setLoading(false);
+    setError(true);
   }
 
-  updateChar = (id) => {
-    this.onCharLoading();
-    this.marvelService
+  const updateChar = (id) => {
+    onCharLoading();
+    marvelService
       .getCharacter(id)
-      .then(this.onCharLoaded)
-      .catch(this.onError);
+      .then(onCharLoaded)
+      .catch(onError);
   }
 
-  onError = () => {
-    this.setState({
-      loading: false,
-      error: true,
-    })
-  }
+  useEffect(() => {
+    if(charId) updateChar(charId);
+    // eslint-disable-next-line
+  }, [charId]);
 
-  componentDidUpdate(prevProps) {
-    if(prevProps !== this.props) this.updateChar(this.props.charId);
-  }
+  const styleError = {
+    width: '250px',
+    height: '100%',
+    objectFit: 'contain',
+    margin: '0 auto'
+  };
 
-  render() {
-    const {char, error, loading} = this.state;
-    const styleError = {
-      width: '250px',
-      height: '100%',
-      objectFit: 'contain',
-      margin: '0 auto'
-    };
+  const skeleton = (error || loading || char) ? null : <Skeleton/>;
+  const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
+  const spinner = loading ? <Spinner/> : null;
+  const content = !(loading || error || !char) ? <View char={char}/> : null;
 
-    const skeleton = (error || loading || char) ? null : <Skeleton/>;
-    const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
-    const spiner = loading ? <Spiner/> : null;
-    const content = !(loading || error || !char) ? <View char={char}/> : null;
+  return (
+    <div className="char__info">
+      {skeleton}
+      {errorMessage}
+      {spinner}
+      {content}
+    </div>
+  )
 
-    return (
-      <div className="char__info">
-        {skeleton}
-        {errorMessage}
-        {spiner}
-        {content}
-      </div>
-    )
-  }
 }
 
 const View = ({char}) => {

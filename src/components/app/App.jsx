@@ -1,10 +1,10 @@
-import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
+import AppHeader from "../appHeader";
+import RandomChar from "../randomChar";
+import CharList from "../charList";
+import CharInfo from "../charInfo";
 import decoration from '../../resources/img/vision.png';
 import {useState} from "react";
-import {ErrorBoundary} from "../errorBoundary/ErrorBoundary";
+import ErrorBoundary from "../errorBoundary";
 
 const App = () => {
   const [charId, setCharId] = useState(null);

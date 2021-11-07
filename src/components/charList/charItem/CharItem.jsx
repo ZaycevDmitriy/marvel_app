@@ -6,7 +6,6 @@ const CharItem = ({name, thumbnail, id, onChangeId}) => {
   const selectCard = useRef();
 
   const onSelectCard = () => {
-    console.log(selectCard)
     selectCard?.current.focus();
  }
 
@@ -28,7 +27,6 @@ const CharItem = ({name, thumbnail, id, onChangeId}) => {
       <div className="char__name">{name}</div>
     </li>
   )
-
 }
 
 CharItem.propTypes = {

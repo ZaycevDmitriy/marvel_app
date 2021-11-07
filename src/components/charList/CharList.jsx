@@ -1,9 +1,9 @@
 import './charList.scss';
 import {useEffect, useState} from "react";
 import {MarvelService} from "../../services/MarvelService";
-import CharItem from "./charItem/CharItem";
-import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
-import {Spiner} from "../spiner/Spiner";
+import CharItem from "./charItem";
+import ErrorMessage from "../errorMessage";
+import Spinner from "../spiner";
 
 const CharList = (props) => {
   const [chars, setChars] = useState(new Array(9).fill(undefined));
@@ -55,7 +55,6 @@ const CharList = (props) => {
   }
 
   useEffect(() => {
-    console.log('mount');
     updateChars();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -98,7 +97,7 @@ const CharList = (props) => {
 
 const ViewAlt = ({error, loaded}) => {
   const errorMessage = error ? <ErrorChar/> : null;
-  const spiner = loaded ? <SpinerChar/> : null;
+  const spiner = loaded ? <SpinnerChar/> : null;
 
   return (
     <>
@@ -116,9 +115,9 @@ const ErrorChar = () => {
   )
 }
 
-const SpinerChar = () => {
+const SpinnerChar = () => {
   return (
-    <Spiner/>
+    <Spinner/>
   )
 }
 

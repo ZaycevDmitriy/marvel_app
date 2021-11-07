@@ -1,6 +1,6 @@
 import img from './error.gif';
 
-export const ErrorMessage = ({style}) => {
+const ErrorMessage = ({style}) => {
   const styleError = {
     display: 'block',
     ...style
@@ -11,3 +11,5 @@ export const ErrorMessage = ({style}) => {
     <img src={img} alt='Error' style={styleError}/>
   )
 }
+
+export default ErrorMessage;

@@ -1,7 +1,6 @@
 import {Component} from "react";
 
-
-export class ErrorBoundary extends Component {
+class ErrorBoundary extends Component {
   state = {
     error: false,
   }
@@ -17,3 +16,5 @@ export class ErrorBoundary extends Component {
     return error ? <h2>Something went wrong</h2> : this.props.children;
   }
 }
+
+export default ErrorBoundary;

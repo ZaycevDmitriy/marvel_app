@@ -1,40 +1,23 @@
 import './charInfo.scss';
 import {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import {MarvelService} from "../../services/MarvelService";
+import useMarvelService from "../../services";
 import ErrorMessage from "../errorMessage";
-import Spinner from "../spiner";
 import Skeleton from "../skeleton/Skeleton";
+import SpinnerMarvel from "../spinnerMarvel";
 
 const CharInfo = ({charId}) => {
   const [char, setChar] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-
-  const marvelService = new MarvelService();
+  const {loading, error, getCharacter, clearError} = useMarvelService();
 
   const onCharLoaded = (char) => {
     setChar(char);
-    setLoading(false);
-    setError(false);
-  }
-
-  const onCharLoading = () => {
-    setLoading(true);
-    setError(false);
-  }
-
-  const onError = () => {
-    setLoading(false);
-    setError(true);
   }
 
   const updateChar = (id) => {
-    onCharLoading();
-    marvelService
-      .getCharacter(id)
-      .then(onCharLoaded)
-      .catch(onError);
+    clearError();
+    getCharacter(id)
+      .then(onCharLoaded);
   }
 
   useEffect(() => {
@@ -51,7 +34,7 @@ const CharInfo = ({charId}) => {
 
   const skeleton = (error || loading || char) ? null : <Skeleton/>;
   const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
-  const spinner = loading ? <Spinner/> : null;
+  const spinner = loading ? <SpinnerMarvel/> : null;
   const content = !(loading || error || !char) ? <View char={char}/> : null;
 
   return (
@@ -67,7 +50,8 @@ const CharInfo = ({charId}) => {
 
 const View = ({char}) => {
   const {name, description, homepage, wiki, thumbnail, comics} = char;
-  const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
+  const urlImgError = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+  const styleImg = (thumbnail === urlImgError) ? {objectPosition: 'left'} : null;
 
   return (
     <>

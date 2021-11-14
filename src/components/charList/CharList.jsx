@@ -1,27 +1,21 @@
 import './charList.scss';
 import {useEffect, useState} from "react";
-import {MarvelService} from "../../services/MarvelService";
+import useMarvelService from "../../services";
 import CharItem from "./charItem";
 import ErrorMessage from "../errorMessage";
-import Spinner from "../spiner";
+import SpinnerMarvel from "../spinnerMarvel";
 
 const CharList = (props) => {
   const [chars, setChars] = useState(new Array(9).fill(undefined));
   const [firstBoot, setFirstBoot] = useState(true);
-  const [loaded, setLoaded] = useState(true);
-  const [error, setError] = useState(false);
   const [offset, setOffset] = useState(210);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [ending, setEnding] = useState(false);
 
-  const marvelService = new MarvelService();
-
-  const onError = () => {
-    setLoaded(false);
-    setError(true);
-  }
+  const {loading, error, getAllCharacters} = useMarvelService();
 
   const updateChars = () => {
+    setFirstBoot(true);
     onLoadingChars();
   }
 
@@ -29,10 +23,8 @@ const CharList = (props) => {
     if (offset > 1556) {
       setEnding(true);
     }
-    marvelService
-      .getAllCharacters(offset)
+      getAllCharacters(offset)
       .then(onLoadedChars)
-      .catch(onError);
   }
 
   const onChangeLoadingBtn = () => {
@@ -43,13 +35,12 @@ const CharList = (props) => {
     // при первой загрузке переписываем array chars
     if(firstBoot) {
       setChars(newChars);
-      setLoaded(false);
-      setError(false);
       setFirstBoot(false);
+      setLoadingBtn(false);
     } else {
       setChars(chars => [...chars, ...newChars]);
       setOffset(offset => offset + 9);
-      setLoaded(false);
+
       setLoadingBtn(false);
     }
   }
@@ -71,7 +62,7 @@ const CharList = (props) => {
       )
     } else {
       return (
-        <ViewAlt loaded={loaded} error={error} key={index}/>
+        <ViewAlt loaded={loading} error={error} key={index}/>
       )
     }
   });
@@ -97,12 +88,12 @@ const CharList = (props) => {
 
 const ViewAlt = ({error, loaded}) => {
   const errorMessage = error ? <ErrorChar/> : null;
-  const spiner = loaded ? <SpinnerChar/> : null;
+  const spinner = loaded ? <SpinnerMarvel/> : null;
 
   return (
     <>
       {errorMessage}
-      {spiner}
+      {spinner}
     </>
   )
 };
@@ -112,12 +103,6 @@ const ErrorChar = () => {
     <li className="char__item" style={{backgroundColor: 'white'}}>
       <ErrorMessage style={{height: '100%', objectFit: 'cover', margin: '0 auto'}}/>
     </li>
-  )
-}
-
-const SpinnerChar = () => {
-  return (
-    <Spinner/>
   )
 }
 

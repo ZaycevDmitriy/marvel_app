@@ -1,41 +1,25 @@
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import {useEffect, useState} from "react";
-import {MarvelService} from "../../services/MarvelService";
-import Spinner from "../spiner";
+import useMarvelService from "../../services";
+// import Spinner from "../spiner";
 import ErrorMessage from "../errorMessage";
+import SpinnerMarvel from "../spinnerMarvel";
 
 const RandomChar = () => {
   const [char, setChar] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
-  const marvelService = new MarvelService();
+  const {loading, getCharacter, error, clearError} = useMarvelService();
 
   const onCharLoaded = (char) => {
     setChar(char);
-    setLoading(false);
-    setError(false);
-  }
-
-  const onCharLoading = () => {
-    setLoading(() => true);
-    setError(() => false);
   }
 
   const updateChar = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 
-    onCharLoading();
-    marvelService
-      .getCharacter(id)
-      .then(onCharLoaded)
-      .catch(onError);
-  }
-
-  const onError = () => {
-    setLoading(() => false);
-    setError(() => true);
+    getCharacter(id)
+      .then(onCharLoaded);
   }
 
   useEffect(() => {
@@ -51,8 +35,8 @@ const RandomChar = () => {
   };
 
   const errorMessage = error ? <ErrorMessage style={styleError}/> : null;
-  const spinner = loading ? <Spinner/> : null;
-  const content = !(loading || error) ? <View char={char}/> : null;
+  const spinner = loading ? <SpinnerMarvel/> : null;
+  const content = !(loading || error || !char) ? <View char={char}/> : null;
 
   return (
     <div className="randomchar">
@@ -67,7 +51,10 @@ const RandomChar = () => {
         <p className="randomchar__title">
           Or choose another one
         </p>
-        <button className="button button__main" onClick={updateChar}>
+        <button className="button button__main" onClick={() => {
+          clearError();
+          updateChar();
+        }}>
           <div className="inner">try it</div>
         </button>
         <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
@@ -79,7 +66,8 @@ const RandomChar = () => {
 
 const View = ({char}) => {
   const {name, description, homepage, wiki, thumbnail} = char;
-  const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
+  const urlImgError = thumbnail ? thumbnail.indexOf('image_not_available.jpg') : 0;
+  const styleImg = (urlImgError !== -1) ? {objectPosition: 'left'} : null;
 
   return (
     <div className="randomchar__block">

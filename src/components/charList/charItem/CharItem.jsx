@@ -9,7 +9,8 @@ const CharItem = ({name, thumbnail, id, onChangeId}) => {
     selectCard?.current.focus();
  }
 
-  const styleImg = (thumbnail.indexOf('image_not_available') !== -1) ? {objectPosition: 'left'} : null;
+  const urlImgError = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+  const styleImg = (thumbnail === urlImgError) ? {objectPosition: 'left'} : null;
 
   return (
     <li className="char__item"

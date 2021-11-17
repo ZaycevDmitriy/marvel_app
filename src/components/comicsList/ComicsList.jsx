@@ -4,6 +4,7 @@ import useMarvelService from "../../services";
 import ComicsItem from "./comicsItem";
 import ErrorMessage from "../errorMessage";
 import SpinnerMarvel from "../spinnerMarvel";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 function ComicsList() {
   const [comics, setComics] = useState(Array(8).fill(undefined));
@@ -52,12 +53,14 @@ function ComicsList() {
   const comicsItem = comics.map((comic, index) => {
     if(comic) {
       return (
-        <ComicsItem title={comic.title}
-                  thumbnail={comic.thumbnail}
-                  key={index}
-                  price={comic.prices}
-                  id={comic.id}
-        />
+        <CSSTransition key={index} classNames="comics__item" timeout={600}>
+          <ComicsItem title={comic.title}
+                      thumbnail={comic.thumbnail}
+                      price={comic.prices}
+                      id={comic.id}
+          />
+        </CSSTransition>
+
       )
     } else {
       return (
@@ -68,8 +71,10 @@ function ComicsList() {
 
   return (
     <div className="comics__list">
-      <ul className="comics__grid">
-        {comicsItem}
+      <ul>
+        <TransitionGroup className="comics__grid">
+          {comicsItem}
+        </TransitionGroup>
       </ul>
       <button className="button button__main button__long"
               onClick={() => {

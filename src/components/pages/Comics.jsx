@@ -1,8 +1,7 @@
 import AppBanner from "../appBanner";
 import ComicsList from "../comicsList";
 
-
-export const Comics = () => {
+const Comics = () => {
   return (
     <>
       <AppBanner/>
@@ -10,3 +9,5 @@ export const Comics = () => {
     </>
   )
 }
+
+export default Comics;

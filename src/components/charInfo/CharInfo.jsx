@@ -5,6 +5,7 @@ import useMarvelService from "../../services";
 import ErrorMessage from "../errorMessage";
 import Skeleton from "../skeleton/Skeleton";
 import SpinnerMarvel from "../spinnerMarvel";
+import {Element} from "react-scroll";
 
 const CharInfo = ({charId}) => {
   const [char, setChar] = useState(null);
@@ -38,14 +39,15 @@ const CharInfo = ({charId}) => {
   const content = !(loading || error || !char) ? <View char={char}/> : null;
 
   return (
-    <div className="char__info">
-      {skeleton}
-      {errorMessage}
-      {spinner}
-      {content}
-    </div>
+    <Element name="scrollToCharInfo">
+      <div className="char__info">
+        {skeleton}
+        {errorMessage}
+        {spinner}
+        {content}
+      </div>
+    </Element>
   )
-
 }
 
 const View = ({char}) => {

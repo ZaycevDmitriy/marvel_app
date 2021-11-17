@@ -7,7 +7,7 @@ import SpinnerMarvel from "../spinnerMarvel";
 
 function ComicsList() {
   const [comics, setComics] = useState(Array(8).fill(undefined));
-  const [offset, setOffset] = useState(210);
+  const [offset, setOffset] = useState(250);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [ending, setEnding] = useState(false);
   const [firstBoot, setFirstBoot] = useState(true);
@@ -20,7 +20,7 @@ function ComicsList() {
   }
 
   const onLoadingComics = (offset) => {
-    if (offset > 50202) {
+    if (offset > 50265) {
       setEnding(true);
     }
     getAllComics(offset, 8)

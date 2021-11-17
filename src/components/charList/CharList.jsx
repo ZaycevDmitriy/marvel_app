@@ -4,6 +4,7 @@ import useMarvelService from "../../services";
 import CharItem from "./charItem";
 import ErrorMessage from "../errorMessage";
 import SpinnerMarvel from "../spinnerMarvel";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 const CharList = (props) => {
   const [chars, setChars] = useState(new Array(9).fill(undefined));
@@ -53,12 +54,13 @@ const CharList = (props) => {
   const charItem = chars.map((char, index) => {
     if(char) {
       return (
-        <CharItem name={char.name}
-                  thumbnail={char.thumbnail}
-                  key={char.id}
-                  id={char.id}
-                  onChangeId={props.onChangeId}
-        />
+        <CSSTransition key={char.id} timeout={500} classNames="char__item">
+          <CharItem name={char.name}
+                    thumbnail={char.thumbnail}
+                    id={char.id}
+                    onChangeId={props.onChangeId}
+          />
+        </CSSTransition>
       )
     } else {
       return (
@@ -69,9 +71,11 @@ const CharList = (props) => {
 
   return (
     <div className="char__list">
-      <ul className="char__grid">
-        {charItem}
-      </ul>
+        <ul>
+          <TransitionGroup className="char__grid">
+            {charItem}
+          </TransitionGroup>
+        </ul>
       <button className="button button__main button__long"
       onClick={() => {
         onLoadingChars(offset + 9);

@@ -1,6 +1,6 @@
 import './page404.scss';
 
-export const Page404 = () => {
+const Page404 = () => {
   return (
     <section id="error-status" className="error-status" data-state="1">
       <div className="overlay"/>
@@ -22,3 +22,5 @@ export const Page404 = () => {
     </section>
   )
 }
+
+export default Page404;

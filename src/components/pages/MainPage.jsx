@@ -5,8 +5,7 @@ import CharInfo from "../charInfo";
 import decoration from "../../resources/img/vision.png";
 import {useState} from "react";
 
-
-export const MainPage = () => {
+const MainPage = () => {
   const [charId, setCharId] = useState(null);
   const onChangeId = (id) => {
     setCharId(id);
@@ -29,3 +28,5 @@ export const MainPage = () => {
     </>
   )
 }
+
+export default MainPage;

@@ -1,3 +1,3 @@
 import SingleComicPage from "./SingleComicPage";
 
-export {SingleComicPage};
+export default SingleComicPage;

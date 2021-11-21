@@ -4,6 +4,7 @@ import CharList from "../charList";
 import CharInfo from "../charInfo";
 import decoration from "../../resources/img/vision.png";
 import {useState} from "react";
+import FindCharacterForm from "../findCharacterForm/FindCharacterForm";
 
 const MainPage = () => {
   const [charId, setCharId] = useState(null);
@@ -21,7 +22,10 @@ const MainPage = () => {
           <CharList onChangeId={onChangeId}/>
         </ErrorBoundary>
         <ErrorBoundary>
-          <CharInfo charId={charId}/>
+          <div>
+            <CharInfo charId={charId}/>
+            <FindCharacterForm/>
+          </div>
         </ErrorBoundary>
       </div>
       <img className="bg-decoration" src={decoration} alt="vision"/>

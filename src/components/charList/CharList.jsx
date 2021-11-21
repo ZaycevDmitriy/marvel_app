@@ -10,7 +10,6 @@ const CharList = (props) => {
   const [chars, setChars] = useState(new Array(9).fill(undefined));
   const [firstBoot, setFirstBoot] = useState(true);
   const [offset, setOffset] = useState(210);
-  const [loadingBtn, setLoadingBtn] = useState(false);
   const [ending, setEnding] = useState(false);
 
   const {loading, error, getAllCharacters} = useMarvelService();
@@ -28,21 +27,14 @@ const CharList = (props) => {
       .then(onLoadedChars)
   }
 
-  const onChangeLoadingBtn = () => {
-    setLoadingBtn(true);
-  }
-
   const onLoadedChars = (newChars) => {
     // при первой загрузке переписываем array chars
     if(firstBoot) {
       setChars(newChars);
       setFirstBoot(false);
-      setLoadingBtn(false);
     } else {
       setChars(chars => [...chars, ...newChars]);
       setOffset(offset => offset + 9);
-
-      setLoadingBtn(false);
     }
   }
 
@@ -79,11 +71,10 @@ const CharList = (props) => {
       <button className="button button__main button__long"
       onClick={() => {
         onLoadingChars(offset + 9);
-        onChangeLoadingBtn();
       }}
-      disabled={loadingBtn}
+      disabled={loading}
       style={ending ? {display: 'none'} : {display: 'block'}}>
-        <div className="inner">{loadingBtn ? 'loading ...' : 'load more'}</div>
+        <div className="inner">{loading ? 'loading ...' : 'load more'}</div>
       </button>
     </div>
   )

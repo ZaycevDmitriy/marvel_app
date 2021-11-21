@@ -8,7 +8,7 @@
     align-items: start;
     &__img {
         width: 293px;
-        height: 450px;
+        height: auto;
     }
     &__name {
         font-weight: bold;
@@ -32,6 +32,7 @@
         font-weight: bold;
         font-size: 18px;
         line-height: 24px;
+        transition: color .4s ease;
         &:hover {
             color: $main-color;
         }

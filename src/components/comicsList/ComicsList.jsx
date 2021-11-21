@@ -9,7 +9,6 @@ import {CSSTransition, TransitionGroup} from "react-transition-group";
 function ComicsList() {
   const [comics, setComics] = useState(Array(8).fill(undefined));
   const [offset, setOffset] = useState(250);
-  const [loadingBtn, setLoadingBtn] = useState(false);
   const [ending, setEnding] = useState(false);
   const [firstBoot, setFirstBoot] = useState(true);
 
@@ -28,20 +27,14 @@ function ComicsList() {
       .then(onLoadedComics)
   }
 
-  const onChangeLoadingBtn = () => {
-    setLoadingBtn(true);
-  }
-
   const onLoadedComics = (newComics) => {
     // при первой загрузке переписываем array chars
     if(firstBoot) {
       setComics(newComics);
       setFirstBoot(false);
-      setLoadingBtn(false);
     } else {
       setComics(comics => [...comics, ...newComics]);
       setOffset(offset => offset + 8);
-      setLoadingBtn(false);
     }
   }
 
@@ -79,13 +72,12 @@ function ComicsList() {
       <button className="button button__main button__long"
               onClick={() => {
                 onLoadingComics(offset + 8);
-                onChangeLoadingBtn();
               }}
-              disabled={loadingBtn}
+              disabled={loading}
               style={ending ? {display: 'none'} : {display: 'block'}}
       >
         <div className="inner">
-          load more
+          {loading ? 'loading...' : 'load more'}
         </div>
       </button>
     </div>
